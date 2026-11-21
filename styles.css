@@ -4,3 +4,4 @@
 .suite-banner{display:block;width:100%;height:clamp(74px,12dvh,112px);margin:12px auto 10px;border-radius:12px;overflow:hidden;border:1px solid rgba(111,188,255,.38);background:#0b2648;box-shadow:0 10px 25px rgba(0,6,26,.32)}
 .suite-banner img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
 @media(min-width:761px){.suite-banner{height:150px}}
+@media(max-width:760px){.app-wrap{padding-left:12px;padding-right:12px}}
