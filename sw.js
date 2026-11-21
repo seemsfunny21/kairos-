@@ -1,5 +1,5 @@
 /* Independent static offline shell. Cross-origin weather API is never intercepted. */
-const CACHE='kairos-shell-v1';
+const CACHE='kairos-shell-v2-visual-alignment';
 const SHELL=['./','./index.html','./styles.css','./app.js','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
