@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-11-26T15:37:47.495433+00:00",
+  "tests": {
+    "daily": {
+      "allowed_by_robots": false
+    },
+    "hourly": {
+      "allowed_by_robots": false
+    }
+  },
+  "robots_status": 200
+}
