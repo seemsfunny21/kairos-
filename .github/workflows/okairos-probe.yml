@@ -1,0 +1,64 @@
+name: Okairos connectivity probe
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/okairos-probe.yml'
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test public pages without storing forecast content
+        run: |
+          python3 - <<'PY'
+          import datetime, json, pathlib, urllib.request, urllib.parse, urllib.robotparser, urllib.error
+          agent = "PersonalWeatherIntegrationProbe/1.0"
+          root = "https://www.okairos.gr"
+          path = "/" + urllib.parse.quote("ιωάννινα.html")
+          report = {"checked_at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "tests": {}}
+          def get(url, limit):
+              request = urllib.request.Request(url, headers={"User-Agent":agent})
+              with urllib.request.urlopen(request, timeout=15) as response:
+                  return response.status, response.read(limit)
+          robots = urllib.robotparser.RobotFileParser()
+          try:
+              status, body = get(root + "/robots.txt", 100000)
+              robots.parse(body.decode("utf-8", "replace").splitlines())
+              report["robots_status"] = status
+          except urllib.error.HTTPError as error:
+              report["robots_status"] = error.code
+              if error.code == 404:
+                  robots.parse([])
+              else:
+                  robots.disallow_all = True
+          except Exception as error:
+              report["robots_error"] = type(error).__name__ + ": " + str(error)[:200]
+              robots.disallow_all = True
+          for name, url in [("daily",root+path), ("hourly",root+path+"?v="+urllib.parse.quote("ωριαία"))]:
+              if not robots.can_fetch(agent,url):
+                  report["tests"][name] = {"allowed_by_robots":False}
+                  continue
+              try:
+                  status, body = get(url, 3000000)
+                  html = body.decode("utf-8","replace")
+                  report["tests"][name] = {"allowed_by_robots":True,"http_status":status,"bytes_read":len(body),"contains_location": "Ιωάννινα" in html or "Ioannina" in html, "contains_precipitation": "Υετός" in html or "mm" in html}
+              except Exception as error:
+                  report["tests"][name] = {"allowed_by_robots":True,"error":type(error).__name__ + ": " + str(error)[:200]}
+          out = pathlib.Path("diagnostics/okairos-probe.json")
+          out.parent.mkdir(exist_ok=True)
+          out.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps(report,ensure_ascii=False))
+          PY
+      - name: Record diagnostic only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add diagnostics/okairos-probe.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Record Okairos access diagnostic"
+          git pull --rebase
+          git push
