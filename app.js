@@ -21,7 +21,7 @@
     return new Intl.DateTimeFormat('el-GR',{weekday:'short',timeZone:'UTC'}).format(new Date(date+'T12:00:00Z'));
   };
   const dateDay=date=>new Intl.DateTimeFormat('el-GR',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}).format(new Date(date+'T12:00:00Z'));
-  const hourNow=()=>new Date().toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'});
+  const hourNow=()=>new Date().toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
   const safeNumber=(n,defaultNumber)=>Number.isFinite(n)?n:defaultNumber;
   const findHourlyIndex=hourly=>{
     if(!hourly||!Array.isArray(hourly.time))return 0;
@@ -104,7 +104,7 @@
     renderHourly(hour,currentIdx);renderDaily(day);renderCycling(hour,currentIdx);
     setStatus('Ενημέρωση '+hourNowFromTimestamp(state.updated)+' · Open-Meteo',Date.now()-state.updated<60*60*1000);
   }
-  function hourNowFromTimestamp(ms){return ms?new Date(ms).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'}):'--:--'}
+  function hourNowFromTimestamp(ms){return ms?new Date(ms).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit',hourCycle:'h23'}):'--:--'}
   function renderHourly(hour,start){
     const count=Math.min(12,Math.max(0,(hour.time||[]).length-start));
     if(!count){$('hourlyRows').innerHTML='<p class="placeholder">Δεν υπάρχουν διαθέσιμα ωριαία δεδομένα.</p>';return;}
