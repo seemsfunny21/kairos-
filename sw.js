@@ -1,5 +1,5 @@
 /* Independent static offline shell. Cross-origin weather API is never intercepted. */
-const CACHE='kairos-shell-v3-hero-banner';
+const CACHE='kairos-shell-v4-credit';
 const SHELL=['./','./index.html','./hero-banner.svg','./styles.css','./app.js','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)).then(()=>self.skipWaiting()));
