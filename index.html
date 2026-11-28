@@ -96,7 +96,7 @@
         <div><span class="sun-symbol">↘</span><small>Δύση</small><strong id="sunset">--:--</strong></div>
       </section>
 
-      <footer><span>Δεδομένα: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></span><span>Αποθήκευση στη συσκευή · Χωρίς σύνδεση λογαριασμού</span></footer>
+      <footer><span>Δεδομένα: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></span><span>Αποθήκευση στη συσκευή · Χωρίς σύνδεση λογαριασμού</span></footer><div class="seemsfunny-credit" style="display:block;text-align:center;margin:14px 0 2px;padding:4px 0;color:inherit;opacity:.65;font-size:12px;line-height:1.4;letter-spacing:.025em">© <span data-credit-year>2026</span> <strong>seemsfunny</strong></div>
     </main>
   </div>
 
@@ -111,5 +111,5 @@
     </section>
   </div>
   <script src="./app.js" defer></script>
-</body>
+<script>document.querySelectorAll("[data-credit-year]").forEach(n=>n.textContent=String(Math.max(2026,new Date().getFullYear())));</script></body>
 </html>
